@@ -31,7 +31,6 @@ public class BpmnModelSequenceFlowValidatorTest {
 
     private BpmnModelSequenceFlowValidator bpmnModelSequenceFlowValidator;
     private final String testSequenceId = "testSequenceId";
-    private final String testSequenceName = "testSequenceName";
 
     @Mock
     private ValidationContext validationContext;
@@ -45,7 +44,6 @@ public class BpmnModelSequenceFlowValidatorTest {
     public void should_returnError_when_noSourceReferenceIsSpecified() {
         BpmnModel bpmnModel = CreateBpmnModelTestHelper.createOneTaskTestProcess();
         SequenceFlow sequenceFlow = (SequenceFlow) bpmnModel.getMainProcess().getFlowElement(testSequenceId);
-        sequenceFlow.setName(testSequenceName);
         sequenceFlow.setSourceRef(null);
 
         assertThat(bpmnModelSequenceFlowValidator.validate(bpmnModel, validationContext))
@@ -54,7 +52,7 @@ public class BpmnModelSequenceFlowValidatorTest {
                         ModelValidationError::getValidatorSetName,
                         ModelValidationError::getReferenceId)
             .contains(tuple(BpmnModelSequenceFlowValidator.NO_SOURCE_REF_PROBLEM,
-                            format(BpmnModelSequenceFlowValidator.NO_SOURCE_REF_PROBLEM_DESCRIPTION, testSequenceName, testSequenceId),
+                            format(BpmnModelSequenceFlowValidator.NO_SOURCE_REF_PROBLEM_DESCRIPTION, sequenceFlow.getClass().getTypeName(), testSequenceId),
                             BpmnModelSequenceFlowValidator.SEQUENCE_FLOW_VALIDATOR_NAME,
                             testSequenceId));
     }
@@ -63,7 +61,6 @@ public class BpmnModelSequenceFlowValidatorTest {
     public void should_returnError_when_noTargetReferenceIsSpecified() {
         BpmnModel bpmnModel = CreateBpmnModelTestHelper.createOneTaskTestProcess();
         SequenceFlow sequenceFlow = (SequenceFlow) bpmnModel.getMainProcess().getFlowElement(testSequenceId);
-        sequenceFlow.setName(testSequenceName);
         sequenceFlow.setTargetRef(null);
 
         assertThat(bpmnModelSequenceFlowValidator.validate(bpmnModel, validationContext))
@@ -72,7 +69,7 @@ public class BpmnModelSequenceFlowValidatorTest {
                         ModelValidationError::getValidatorSetName,
                         ModelValidationError::getReferenceId)
             .contains(tuple(BpmnModelSequenceFlowValidator.NO_TARGET_REF_PROBLEM,
-                            format(BpmnModelSequenceFlowValidator.NO_TARGET_REF_PROBLEM_DESCRIPTION, testSequenceName, testSequenceId),
+                            format(BpmnModelSequenceFlowValidator.NO_TARGET_REF_PROBLEM_DESCRIPTION, sequenceFlow.getClass().getTypeName(), testSequenceId),
                             BpmnModelSequenceFlowValidator.SEQUENCE_FLOW_VALIDATOR_NAME,
                             testSequenceId));
     }

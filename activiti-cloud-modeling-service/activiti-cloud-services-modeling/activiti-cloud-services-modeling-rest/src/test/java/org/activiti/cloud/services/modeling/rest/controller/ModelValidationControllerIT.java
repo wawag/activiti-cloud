@@ -400,7 +400,7 @@ public class ModelValidationControllerIT {
                         ModelValidationError::getDescription,
                         ModelValidationError::getReferenceId)
             .contains(tuple("Flow node has no outgoing flow",
-                            "Flow node [name: 'TestTaskName', id: 'TestTaskId'] has to have an outgoing flow",
+                            "'org.activiti.bpmn.model.Task' with id: 'TestTaskId' has to have an outgoing flow",
                             "TestTaskId"));
     }
 

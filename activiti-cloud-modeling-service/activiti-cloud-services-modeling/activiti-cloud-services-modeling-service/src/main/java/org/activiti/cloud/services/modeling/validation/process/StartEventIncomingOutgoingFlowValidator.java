@@ -22,16 +22,15 @@ import org.apache.commons.collections.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static java.lang.String.format;
 
 public class StartEventIncomingOutgoingFlowValidator implements FlowNodeFlowsValidator {
 
     public static final String NO_OUTGOING_FLOW_PROBLEM = "Start event has no outgoing flow";
-    public static final String NO_OUTGOING_FLOW_PROBLEM_DESCRIPTION = "Flow node [name: '%s', id: '%s'] has to have an outgoing flow";
+    public static final String NO_OUTGOING_FLOW_PROBLEM_DESCRIPTION = "'%s' with id: '%s' has to have an outgoing flow";
     public static final String INCOMING_FLOW_ON_START_EVENT_PROBLEM = "Start event should not have incoming flow";
-    public static final String INCOMING_FLOW_ON_START_EVENT_PROBLEM_DESCRIPTION = "Flow node [name: '%s', id: '%s'] should not have incoming flow";
+    public static final String INCOMING_FLOW_ON_START_EVENT_PROBLEM_DESCRIPTION = "'%s' with id: '%s' should not have incoming flow";
     public static final String START_EVENT_FLOWS_VALIDATOR_NAME = "BPMN Start event validator";
 
     @Override
@@ -40,14 +39,14 @@ public class StartEventIncomingOutgoingFlowValidator implements FlowNodeFlowsVal
 
         if (CollectionUtils.isEmpty(flowNode.getOutgoingFlows())) {
             errors.add(createModelValidationError(NO_OUTGOING_FLOW_PROBLEM,
-                format(NO_OUTGOING_FLOW_PROBLEM_DESCRIPTION, Optional.ofNullable(flowNode.getName()).orElse(""), flowNode.getId()),
+                format(NO_OUTGOING_FLOW_PROBLEM_DESCRIPTION, flowNode.getClass().getTypeName(), flowNode.getId()),
                 START_EVENT_FLOWS_VALIDATOR_NAME,
                 null,
                 flowNode.getId()));
         }
         if (CollectionUtils.isNotEmpty(flowNode.getIncomingFlows())) {
             errors.add(createModelValidationError(INCOMING_FLOW_ON_START_EVENT_PROBLEM,
-                format(INCOMING_FLOW_ON_START_EVENT_PROBLEM_DESCRIPTION, Optional.ofNullable(flowNode.getName()).orElse(""), flowNode.getId()),
+                format(INCOMING_FLOW_ON_START_EVENT_PROBLEM_DESCRIPTION, flowNode.getClass().getTypeName(), flowNode.getId()),
                 START_EVENT_FLOWS_VALIDATOR_NAME,
                 null,
                 flowNode.getId()));

@@ -25,16 +25,15 @@ import org.apache.commons.collections.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static java.lang.String.format;
 
 public class IntermediateFlowNodeIncomingOutgoingFlowValidator implements FlowNodeFlowsValidator {
 
     public static final String NO_INCOMING_FLOW_PROBLEM = "Flow node has no incoming flow";
-    public static final String NO_INCOMING_FLOW_PROBLEM_DESCRIPTION = "Flow node [name: '%s', id: '%s'] has to have an incoming flow";
+    public static final String NO_INCOMING_FLOW_PROBLEM_DESCRIPTION = "'%s' with id: '%s' has to have an incoming flow";
     public static final String NO_OUTGOING_FLOW_PROBLEM = "Flow node has no outgoing flow";
-    public static final String NO_OUTGOING_FLOW_PROBLEM_DESCRIPTION = "Flow node [name: '%s', id: '%s'] has to have an outgoing flow";
+    public static final String NO_OUTGOING_FLOW_PROBLEM_DESCRIPTION = "'%s' with id: '%s' has to have an outgoing flow";
     public static final String INTERMEDIATE_FLOWS_VALIDATOR_NAME = "BPMN Intermediate Flow node validator";
 
     @Override
@@ -43,7 +42,7 @@ public class IntermediateFlowNodeIncomingOutgoingFlowValidator implements FlowNo
 
         if (CollectionUtils.isEmpty(flowNode.getIncomingFlows())) {
             errors.add(createModelValidationError(NO_INCOMING_FLOW_PROBLEM,
-                format(NO_INCOMING_FLOW_PROBLEM_DESCRIPTION, Optional.ofNullable(flowNode.getName()).orElse(""), flowNode.getId()),
+                format(NO_INCOMING_FLOW_PROBLEM_DESCRIPTION, flowNode.getClass().getTypeName(), flowNode.getId()),
                 INTERMEDIATE_FLOWS_VALIDATOR_NAME,
                 null,
                 flowNode.getId()));
@@ -51,7 +50,7 @@ public class IntermediateFlowNodeIncomingOutgoingFlowValidator implements FlowNo
 
         if (CollectionUtils.isEmpty(flowNode.getOutgoingFlows())) {
             errors.add(createModelValidationError(NO_OUTGOING_FLOW_PROBLEM,
-                format(NO_OUTGOING_FLOW_PROBLEM_DESCRIPTION, Optional.ofNullable(flowNode.getName()).orElse(""), flowNode.getId()),
+                format(NO_OUTGOING_FLOW_PROBLEM_DESCRIPTION, flowNode.getClass().getTypeName(), flowNode.getId()),
                 INTERMEDIATE_FLOWS_VALIDATOR_NAME,
                 null,
                 flowNode.getId()));

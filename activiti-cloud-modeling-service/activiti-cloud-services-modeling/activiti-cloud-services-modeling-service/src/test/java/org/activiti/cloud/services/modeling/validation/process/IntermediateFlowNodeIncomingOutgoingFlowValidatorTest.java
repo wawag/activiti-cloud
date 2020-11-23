@@ -36,7 +36,6 @@ public class IntermediateFlowNodeIncomingOutgoingFlowValidatorTest {
 
     private IntermediateFlowNodeIncomingOutgoingFlowValidator intermediateFlowNodeIncomingOutgoingFlowValidator;
     private final String userTaskId = "theTask";
-    private final String userTaskName = "userTaskName";
 
     @BeforeEach
     void setUp() {
@@ -47,7 +46,6 @@ public class IntermediateFlowNodeIncomingOutgoingFlowValidatorTest {
     public void should_returnError_when_incomingFlowIsEmpty() {
         BpmnModel bpmnModel = CreateBpmnModelTestHelper.createOneTaskTestProcess();
         UserTask userTask = (UserTask) bpmnModel.getMainProcess().getFlowElement(userTaskId);
-        userTask.setName(userTaskName);
         userTask.setIncomingFlows(new ArrayList<>());
 
         assertThat(intermediateFlowNodeIncomingOutgoingFlowValidator.validate(userTask))
@@ -57,7 +55,7 @@ public class IntermediateFlowNodeIncomingOutgoingFlowValidatorTest {
                         ModelValidationError::getReferenceId)
             .contains(tuple(IntermediateFlowNodeIncomingOutgoingFlowValidator.NO_INCOMING_FLOW_PROBLEM,
                             format(IntermediateFlowNodeIncomingOutgoingFlowValidator.NO_INCOMING_FLOW_PROBLEM_DESCRIPTION,
-                                   userTaskName, userTaskId),
+                                   userTask.getClass().getTypeName(), userTaskId),
                             IntermediateFlowNodeIncomingOutgoingFlowValidator.INTERMEDIATE_FLOWS_VALIDATOR_NAME,
                             userTaskId));
     }
@@ -66,7 +64,6 @@ public class IntermediateFlowNodeIncomingOutgoingFlowValidatorTest {
     public void should_returnError_when_outgoingFlowIsEmpty() {
         BpmnModel bpmnModel = CreateBpmnModelTestHelper.createOneTaskTestProcess();
         UserTask userTask = (UserTask) bpmnModel.getMainProcess().getFlowElement(userTaskId);
-        userTask.setName(userTaskName);
         userTask.setOutgoingFlows(new ArrayList<>());
 
         assertThat(intermediateFlowNodeIncomingOutgoingFlowValidator.validate(userTask))
@@ -76,7 +73,7 @@ public class IntermediateFlowNodeIncomingOutgoingFlowValidatorTest {
                         ModelValidationError::getReferenceId)
             .contains(tuple(IntermediateFlowNodeIncomingOutgoingFlowValidator.NO_OUTGOING_FLOW_PROBLEM,
                             format(IntermediateFlowNodeIncomingOutgoingFlowValidator.NO_OUTGOING_FLOW_PROBLEM_DESCRIPTION,
-                                   userTaskName, userTaskId),
+                                   userTask.getClass().getTypeName(), userTaskId),
                             IntermediateFlowNodeIncomingOutgoingFlowValidator.INTERMEDIATE_FLOWS_VALIDATOR_NAME,
                             userTaskId));
     }

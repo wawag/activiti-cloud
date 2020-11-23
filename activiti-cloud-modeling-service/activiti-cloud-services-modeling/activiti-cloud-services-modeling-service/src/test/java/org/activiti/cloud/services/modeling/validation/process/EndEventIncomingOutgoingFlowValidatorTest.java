@@ -33,7 +33,6 @@ public class EndEventIncomingOutgoingFlowValidatorTest {
 
     private EndEventIncomingOutgoingFlowValidator endEventIncomingOutgoingFlowValidator;
     private final String endEventId = "theEnd";
-    private final String endEventName = "endEventName";
 
     @BeforeEach
     void setUp() {
@@ -44,7 +43,7 @@ public class EndEventIncomingOutgoingFlowValidatorTest {
     public void should_returnError_when_endEventIncomingFlowIsEmpty() {
         BpmnModel bpmnModel = CreateBpmnModelTestHelper.createOneTaskTestProcess();
         EndEvent endEvent = (EndEvent) bpmnModel.getMainProcess().getFlowElement(endEventId);
-        endEvent.setName(endEventName);
+        endEvent.setName(null);
         endEvent.setIncomingFlows(new ArrayList<>());
 
         assertThat(endEventIncomingOutgoingFlowValidator.validate(endEvent))
@@ -53,7 +52,8 @@ public class EndEventIncomingOutgoingFlowValidatorTest {
                         ModelValidationError::getValidatorSetName,
                         ModelValidationError::getReferenceId)
             .contains(tuple(EndEventIncomingOutgoingFlowValidator.NO_INCOMING_FLOW_PROBLEM,
-                            format(EndEventIncomingOutgoingFlowValidator.NO_INCOMING_FLOW_PROBLEM_DESCRIPTION, endEventName, endEventId),
+                            format(EndEventIncomingOutgoingFlowValidator.NO_INCOMING_FLOW_PROBLEM_DESCRIPTION,
+                                   endEvent.getClass().getTypeName(), endEventId),
                             EndEventIncomingOutgoingFlowValidator.END_EVENT_FLOWS_VALIDATOR_NAME,
                             endEventId));
     }
@@ -62,7 +62,6 @@ public class EndEventIncomingOutgoingFlowValidatorTest {
     public void should_returnError_when_endEventOutgoingFlowIsNotEmpty() {
         BpmnModel bpmnModel = CreateBpmnModelTestHelper.createOneTaskTestProcess();
         EndEvent endEvent = (EndEvent) bpmnModel.getMainProcess().getFlowElement(endEventId);
-        endEvent.setName(endEventName);
         SequenceFlow outgoingFlow = new SequenceFlow();
         endEvent.getOutgoingFlows().add(outgoingFlow);
 
@@ -72,7 +71,8 @@ public class EndEventIncomingOutgoingFlowValidatorTest {
                         ModelValidationError::getValidatorSetName,
                         ModelValidationError::getReferenceId)
             .contains(tuple(EndEventIncomingOutgoingFlowValidator.OUTGOING_FLOW_ON_END_EVENT_PROBLEM,
-                            format(EndEventIncomingOutgoingFlowValidator.OUTGOING_FLOW_ON_END_EVENT_PROBLEM_DESCRIPTION, endEventName, endEventId),
+                            format(EndEventIncomingOutgoingFlowValidator.OUTGOING_FLOW_ON_END_EVENT_PROBLEM_DESCRIPTION,
+                                   endEvent.getClass().getTypeName(), endEventId),
                             EndEventIncomingOutgoingFlowValidator.END_EVENT_FLOWS_VALIDATOR_NAME,
                             endEventId));
     }

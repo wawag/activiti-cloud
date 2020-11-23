@@ -23,7 +23,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import static java.lang.String.format;
@@ -34,9 +33,9 @@ import static java.lang.String.format;
 public class BpmnModelSequenceFlowValidator implements BpmnModelValidator {
 
     public static final String NO_SOURCE_REF_PROBLEM = "Sequence flow has no source reference";
-    public static final String NO_SOURCE_REF_PROBLEM_DESCRIPTION = "Name: '%s', id: '%s' has to have a source reference";
+    public static final String NO_SOURCE_REF_PROBLEM_DESCRIPTION = "'%s' with id: '%s' has to have a source reference";
     public static final String NO_TARGET_REF_PROBLEM = "Sequence flow has no target reference";
-    public static final String NO_TARGET_REF_PROBLEM_DESCRIPTION = "Name: '%s', id: '%s' has to have a target reference";
+    public static final String NO_TARGET_REF_PROBLEM_DESCRIPTION = "'%s' with id: '%s' has to have a target reference";
     public static final String SEQUENCE_FLOW_VALIDATOR_NAME = "BPMN sequence flow validator";
 
     @Override
@@ -55,7 +54,7 @@ public class BpmnModelSequenceFlowValidator implements BpmnModelValidator {
         List<ModelValidationError> errors = new ArrayList<>();
         if (StringUtils.isEmpty(sequenceFlow.getSourceRef())) {
             errors.add(createModelValidationError(NO_SOURCE_REF_PROBLEM,
-                format(NO_SOURCE_REF_PROBLEM_DESCRIPTION, Optional.ofNullable(sequenceFlow.getName()).orElse(""), sequenceFlow.getId()),
+                format(NO_SOURCE_REF_PROBLEM_DESCRIPTION, sequenceFlow.getClass().getTypeName(), sequenceFlow.getId()),
                 SEQUENCE_FLOW_VALIDATOR_NAME,
                 null,
                 sequenceFlow.getId()));
@@ -63,7 +62,7 @@ public class BpmnModelSequenceFlowValidator implements BpmnModelValidator {
 
         if (StringUtils.isEmpty(sequenceFlow.getTargetRef())) {
             errors.add(createModelValidationError(NO_TARGET_REF_PROBLEM,
-                format(NO_TARGET_REF_PROBLEM_DESCRIPTION, Optional.ofNullable(sequenceFlow.getName()).orElse(""), sequenceFlow.getId()),
+                format(NO_TARGET_REF_PROBLEM_DESCRIPTION, sequenceFlow.getClass().getTypeName(), sequenceFlow.getId()),
                 SEQUENCE_FLOW_VALIDATOR_NAME,
                 null,
                 sequenceFlow.getId()));
